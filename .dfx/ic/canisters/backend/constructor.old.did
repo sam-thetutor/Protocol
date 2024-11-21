@@ -1,0 +1,10 @@
+type BobInfo = 
+ record {
+   blocksMined: nat64;
+   currentBlockMinerCount: nat64;
+   nextHalvingIn: nat64;
+   totalMiners: nat64;
+ };
+service : {
+  get_bob_info: () -> (BobInfo);
+}

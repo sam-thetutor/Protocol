@@ -1,0 +1,1 @@
+export const PORTAL_FACTORY = "65xre-uiaaa-aaaap-qpkia-cai"

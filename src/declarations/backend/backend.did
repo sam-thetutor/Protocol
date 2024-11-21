@@ -1,0 +1,18 @@
+type PortalFactory = 
+ service {
+   get_bob_info: () -> (BobInfo);
+   get_user_miners: (principal) -> (vec Miner);
+ };
+type Miner = 
+ record {
+   id: principal;
+   mined_blocks: nat64;
+ };
+type BobInfo = 
+ record {
+   blocksMined: nat64;
+   currentBlockMinerCount: nat64;
+   nextHalvingIn: nat64;
+   totalMiners: nat64;
+ };
+service : () -> PortalFactory

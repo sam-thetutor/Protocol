@@ -1,0 +1,26 @@
+type Account = record { owner : principal; subaccount : opt vec nat8 };
+type CanisterInfo = record {
+  neuron_6m_account : Account;
+  latest_distribution_icp_per_vp : opt float64;
+  neuron_id_6m : opt NeuronId;
+  neuron_id_8y : opt NeuronId;
+  tracked_6m_stake : nat64;
+  minimum_withdraw_amount : nat64;
+  neuron_8y_stake_e8s : nat64;
+  governance_fee_share_percent : nat64;
+  neuron_8y_account : Account;
+  minimum_deposit_amount : nat64;
+  neuron_6m_stake_e8s : nat64;
+  exchange_rate : nat64;
+  nicp_supply : nat64;
+  total_icp_deposited : nat64;
+  stakers_count : nat64;
+};
+type DEARNPORTAL = service {
+  get_my_water_neuron_stakes : () -> (record { nicp : nat });
+  get_water_neuron_info : () -> (CanisterInfo);
+  stake_in_water_neuron : (nat) -> (text);
+  unstake_from_water_neuron : (nat) -> (text);
+};
+type NeuronId = record { id : nat64 };
+service : DEARNPORTAL

@@ -54,6 +54,7 @@ flex w-full px-4 gap-4 h-[50vh] flex-col justify-center items-center"
       <div className="flex flex-col mt-36 items-center">
         <h1 className="text-7xl">Dearn Protocol</h1>
         <span>A cross-chain yield asset management protocol</span>
+        <button onClick={()=>navigate('/admin')}>Admin</button>
       </div>
       <div className="grid grid-cols-2 mt-36 gap-4 ">
         {cards.map((card, index) => (

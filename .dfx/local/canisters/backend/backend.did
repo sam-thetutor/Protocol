@@ -1,7 +1,20 @@
+type Result = 
+ variant {
+   err: text;
+   ok: record {portalID: text;};
+ };
 type PortalFactory = 
  service {
+   create_user_portal: () -> (Result);
+   get_all_portals: () -> (vec record {
+                                 principal;
+                                 text;
+                               });
    get_bob_info: () -> (BobInfo);
    get_user_miners: (principal) -> (vec Miner);
+   get_user_portal: (principal) -> (text);
+   save_user_portal: (principal, text) -> ();
+   uploadWasm: (vec nat8) -> (text);
  };
 type Miner = 
  record {

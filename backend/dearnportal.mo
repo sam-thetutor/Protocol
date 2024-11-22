@@ -17,6 +17,7 @@ import { recurringTimer } "mo:base/Timer";
 import TrieMap "mo:base/TrieMap";
 import Time "mo:base/Time";
 import BobTypes "Types/BOB/Bob.types";
+import MgtTypes "Types/ICP/mgt.types";
 
 
 actor class DEARNPORTAL() = this {
@@ -27,32 +28,16 @@ actor class DEARNPORTAL() = this {
     let WATER_NEURON_NICP_CANISTER_ID : Text = "buwm7-7yaaa-aaaar-qagva-cai";
     let ICP_CANISTER_ID : Text = "ryjl3-tyaaa-aaaaa-aaaba-cai";
     let BOB_CANISTER_ID : Text = "6lnhz-oaaaa-aaaas-aabkq-cai";
-
+    
+    let ic = actor ("aaaaa-aa") : MgtTypes.IC;
 
     let bobActor = actor (BOB_CANISTER_ID) : BobTypes.Self;
-
-
 
 
     private var recurringStaking = TrieMap.TrieMap<Text, MainTypes.RecurringWtrNeuronStake>(Text.equal, Text.hash);
     let WaterNeuron = actor (WATER_NEURON_CANISTER_ID) : WaterneuronTypes.Self;
     let IcpActor = actor (ICP_CANISTER_ID) : IcpTypes.Self;
     let NicpActor = actor (WATER_NEURON_NICP_CANISTER_ID) : NicpTypes.Self;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -169,7 +154,15 @@ actor class DEARNPORTAL() = this {
 
 
 
-///Providing liquidity to the icpswap pools
+
+//initialize settings
+//fetch the controllers and save them in the hashMap
+
+// public func initialize():async (){
+//     let results = await 
+// }
+
+
 
 
 

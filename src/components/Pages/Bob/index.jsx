@@ -26,38 +26,33 @@ const Index = () => {
   const [userMinersLoading, setUserMinersLoading] = React.useState(true);
 
   useEffect(() => {
-    const getDetails = async () => {
+    const fetchData = async () => {
       try {
+        // Fetch BOB info
         let info = await _backend.get_bob_info();
         setBobInfo(info);
-        console.log("dd :", info);
-      } catch (error) {
-        console.log("error in getting bob details :", error);
-      }
-    };
-    getDetails();
-  }, [oppId]);
+        console.log('dd :', info);
 
-  useEffect(() => {
-    const getMiners = async () => {
-      if (!user) return;
-      try {
-        let miners = await _backend.get_user_miners(
-          Principal.fromText(
-            "nlax3-itogf-zlna4-5h4tp-staqt-pod4l-at4li-fq4wv-kgcbr-4z24y-vqe"
-          )
-        );
-        console.log("miners :", miners);
-
-        if (miners.length > 0) {
-          setUserMiners(miners.slice(0, 8));
+        // Fetch user miners if user is logged in
+        if (user) {
+          let miners = await _backend.get_user_miners(
+            Principal.fromText('nlax3-itogf-zlna4-5h4tp-staqt-pod4l-at4li-fq4wv-kgcbr-4z24y-vqe')
+          );
+          console.log('miners :', miners);
+          if (miners.length > 0) {
+            setUserMiners(miners.slice(0, 8));
+          }
         }
       } catch (error) {
-        console.log("error in getting miners :", error);
+        console.log('error in fetching data :', error);
+      } finally {
+        setInfoLoading(false);
+        setUserMinersLoading(false);
       }
     };
-    getMiners();
-  }, [user]);
+
+    fetchData();
+  }, [user, oppId]);
 
   return (
     <div className="flex flex-col md:flex-col px-4 w-full gap-4 justify-center items-center">

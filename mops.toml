@@ -1,0 +1,3 @@
+[dependencies]
+base = "0.11.1"
+ic = "2.0.0"

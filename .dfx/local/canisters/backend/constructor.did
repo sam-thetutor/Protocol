@@ -6,7 +6,13 @@ type BobInfo = record {
 };
 type Miner = record { id : principal; mined_blocks : nat64 };
 type PortalFactory = service {
+  create_user_portal : () -> (Result);
+  get_all_portals : () -> (vec record { principal; text });
   get_bob_info : () -> (BobInfo);
   get_user_miners : (principal) -> (vec Miner);
+  get_user_portal : (principal) -> (text);
+  save_user_portal : (principal, text) -> ();
+  uploadWasm : (vec nat8) -> (text);
 };
+type Result = variant { ok : record { portalID : text }; err : text };
 service : () -> PortalFactory

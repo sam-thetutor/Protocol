@@ -11,6 +11,7 @@ import JoinPool from "./JoinPool";
 import { useIdentityKit } from "@nfid/identitykit/react";
 import { Principal } from "@dfinity/principal";
 import SaleMiner from "./SaleMiner";
+import { useQuery } from "@tanstack/react-query";
 
 const agent = new HttpAgent({ host: "https://ic0.app" });
 const _backend = createActor(PORTAL_FACTORY, PortalFactoryIDL, agent);
@@ -20,6 +21,11 @@ const Index = () => {
 
   const { user } = useIdentityKit();
 
+  const { data: userPortal } = useQuery({
+    queryKey: ["userPortal"],
+  });
+
+  console.log("ddddd :", userPortal);
   const [bobInfo, setBobInfo] = React.useState(null);
   const [infoLoading, setInfoLoading] = React.useState(true);
   const [userMiners, setUserMiners] = React.useState(null);

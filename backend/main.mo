@@ -30,6 +30,8 @@ actor class PortalFactory() = this {
 
     type BobInfo = MainTypes.BobInfo;
 
+    type PortalSale = MainTypes.PortalSale;
+
     //store the portal wasm
     stable var portalWasm : [Nat8] = [];
     //mangement canister
@@ -49,6 +51,57 @@ actor class PortalFactory() = this {
         Principal.equal,
         Principal.hash,
     );
+
+//store the portals for sale
+private stable var PortalSaleArray : [(Text, PortalSale)] = [];
+    private var PortalSaleHashMap = HashMap.fromIter<Text, PortalSale>(
+        Iter.fromArray(PortalSaleArray),
+        Iter.size(Iter.fromArray(PortalSaleArray)),
+        Text.equal,
+        Text.hash,
+    );
+
+
+//get all the portals available for sale
+    public func get_all_portals_for_sale() : async [(Text, PortalSale)] {
+        return Iter.toArray(PortalSaleHashMap.entries());
+    };
+
+    //get the portal for sale
+    public func get_portal_for_sale(_portalID : Text) : async PortalSale {
+        switch (PortalSaleHashMap.get(_portalID)) {
+            case (?data) { return data };
+            case (null) { return { portal_id = ""; price = 0; owner = Principal.fromActor(this); offers = [] } };
+        };
+    };
+
+    //add portal for sale
+    //check if the caller is the controller of the portal before adding it for sale
+
+
+
+
+
+//remove portal from sale
+//check if caller is the one that listed it for sale
+     public shared({caller}) func remove_portal_from_sale(_portalID : Text) : async Text {
+        switch (PortalSaleHashMap.get(_portalID)) {
+            case (?data) {
+                if (data.owner == caller) {
+                    ignore PortalSaleHashMap.remove(_portalID);
+                    return "success";
+                } else {
+                    return "you are not the owner of the portal";
+                };
+            };
+            case (null) { return "portal not found" };
+        };
+    };
+
+
+
+
+
 
     //manually save user portal
     public func save_user_portal(_usr : Principal, _portal : Text) : async () {
@@ -140,6 +193,18 @@ actor class PortalFactory() = this {
     };
 
 
+
+//list the portal for sale
+
+
+
+
+
+
+
+
+
+
     //upgrade portal to the newest wasm
     public shared func upgrade_portal(canID:Text) : async Text {
         
@@ -153,8 +218,9 @@ actor class PortalFactory() = this {
                 };
                 let insRes = await ic.install_code(installSettings);
                 "success";
-           
     };
+
+
 
 
     //get user portal

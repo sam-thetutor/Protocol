@@ -19,28 +19,97 @@ import Time "mo:base/Time";
 import BobTypes "Types/BOB/Bob.types";
 import MgtTypes "Types/ICP/mgt.types";
 
-
 actor class DEARNPORTAL() = this {
 
     type RecurringWtrNeuronStake = MainTypes.RecurringWtrNeuronStake;
-   
+
     let WATER_NEURON_CANISTER_ID : Text = "tsbvt-pyaaa-aaaar-qafva-cai";
     let WATER_NEURON_NICP_CANISTER_ID : Text = "buwm7-7yaaa-aaaar-qagva-cai";
     let ICP_CANISTER_ID : Text = "ryjl3-tyaaa-aaaaa-aaaba-cai";
     let BOB_CANISTER_ID : Text = "6lnhz-oaaaa-aaaas-aabkq-cai";
-    
+
     let ic = actor ("aaaaa-aa") : MgtTypes.IC;
 
     let bobActor = actor (BOB_CANISTER_ID) : BobTypes.Self;
-
 
     private var recurringStaking = TrieMap.TrieMap<Text, MainTypes.RecurringWtrNeuronStake>(Text.equal, Text.hash);
     let WaterNeuron = actor (WATER_NEURON_CANISTER_ID) : WaterneuronTypes.Self;
     let IcpActor = actor (ICP_CANISTER_ID) : IcpTypes.Self;
     let NicpActor = actor (WATER_NEURON_NICP_CANISTER_ID) : NicpTypes.Self;
 
+    //create new Miner
+    public func create_new_miner() : async Text {
+        //approve the bo bob actor to spend the icp
+        let approvalResults = await IcpActor.icrc2_approve({
+            fee = null;
+            memo = null;
+            from_subaccount = null;
+            created_at_time = null;
+            amount = 100000000;
+            expected_allowance = null;
+            expires_at = null;
+            spender = {
+                owner = Principal.fromText(BOB_CANISTER_ID);
+                subaccount = null;
+            };
+        });
+
+        //create the miner
+        switch (approvalResults) {
+            case (#Ok(val)) {
+
+                let results = await bobActor.spawn_miner(100000000);
+                switch (results) {
+                    case (#Ok(prin)) {
+                        return "miner created successfully";
+                    };
+                    case (#Err(err)) {
+                        return "failed to create miner";
+                    };
+                };
+            };
+            case (#Err(err)) {
+                return "failed to approve the bob actor to spend the icp";
+            };
+        };
+    };
 
 
+    //join the miner pool
+    public func join_miner_pool(amount:Nat) : async Text {
+
+let approvalResults = await IcpActor.icrc2_approve({
+            fee = null;
+            memo = null;
+            from_subaccount = null;
+            created_at_time = null;
+            amount = amount;
+            expected_allowance = null;
+            expires_at = null;
+            spender = {
+                owner = Principal.fromText(BOB_CANISTER_ID);
+                subaccount = null;
+            };
+        });
+
+        switch (approvalResults) {
+            case (#Ok(val)) {
+                let results = await bobActor.join_pool(Nat64.fromNat(amount));
+                switch (results) {
+                    case (#Ok) {
+                        return "joined the miner pool";
+                    };
+                    case (#Err(err)) {
+                        return "failed to join the miner pool";
+                    };
+                };
+            };
+            case (#Err(err)) {
+                return "failed to approve the bob actor to spend the icp";
+            };
+        };
+
+    };
 
 
 
@@ -150,25 +219,11 @@ actor class DEARNPORTAL() = this {
 
     //------------------------Automate staking in the water neuron according to the scheduled time---------------------
 
+    //initialize settings
+    //fetch the controllers and save them in the hashMap
 
-
-
-
-
-//initialize settings
-//fetch the controllers and save them in the hashMap
-
-// public func initialize():async (){
-//     let results = await 
-// }
-
-
-
-
-
-
-
-
-
+    // public func initialize():async (){
+    //     let results = await
+    // }
 
 };

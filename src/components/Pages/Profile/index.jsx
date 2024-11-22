@@ -6,12 +6,13 @@ import { idlFactory as PortalFactoryIDL } from "../../../Utils/portalfactory.did
 import { idlFactory as ICPDL } from "../../../Utils/icp.did";
 import { useNavigate } from "react-router-dom";
 import { Principal } from "@dfinity/principal";
-import { useIdentityKit } from "@nfid/identitykit/react";
+import { useAgent, useIdentityKit } from "@nfid/identitykit/react";
 import { AccountIdentifier } from "@dfinity/ledger-icp";
 import { CgClose } from "react-icons/cg";
 import { ClipLoader } from "react-spinners";
+import { useQueryClient } from "@tanstack/react-query";
 
-const agent = new HttpAgent({ host: "https://ic0.app" });
+const agent = new HttpAgent({ host: "https://ic0.app",retryTimes:5 });
 const _backend = createActor(PORTAL_FACTORY, PortalFactoryIDL, agent);
 let icpActor = createActor(ICP_LEDGER_ID, ICPDL, agent);
 
@@ -24,6 +25,11 @@ const Index = () => {
   const [dataLoading, setDataLoading] = useState(false);
   const [newPortalLoading, setNewPortalLoading] = useState(false);
 
+  const authenticatedAgent = useAgent();
+  const queryClient = useQueryClient();
+
+
+//7l4jp-byaaa-aaaap-qpkna-cai
   useEffect(() => {
     const getUserPortalDetails = async () => {
       if (!user) return;
@@ -32,25 +38,30 @@ const Index = () => {
         //get the user portal, if user is logged in
         let userPortal = await _backend.get_user_portal(user.principal);
 
-        if (userPortal !== "") {
+
+        console.log("user portal", userPortal);
+        if (userPortal != "") {
           //get user balance
           let balance = await icpActor.icrc1_balance_of({
             owner: Principal.fromText(userPortal),
             subaccount: [],
           });
 
+          console.log("balance", Number(balance));
+         queryClient.setQueryData(["userPortal"], userPortal);
+
           setPortalDetails({
             balance: Number(balance),
             id: userPortal,
           });
-          console.log("user portal :", userPortal, Number(balance));
         } else {
           setPortalDetails(null);
         }
-        console.log("user", user?.principal?.toString());
+
       } catch (error) {
         console.log("error in getting user portal details", error);
       }
+
       setDataLoading(false);
     };
 
@@ -62,13 +73,25 @@ const Index = () => {
   //create new portal
   const handleNewPortal = async () => {
     try {
-      console.log("creating new portal");
+
+      if(!user || !authenticatedAgent) return;
+
+      setNewPortalLoading(true)
+
+      const authActor = createActor(PORTAL_FACTORY, PortalFactoryIDL, authenticatedAgent);
+
+      let newPortal = await authActor.create_user_portal();
+      console.log("new portal", newPortal);
+
     } catch (error) {
       console.log("error in creating new portal", error);
     }
+    setNewPortalLoading(false)
+    setRefreshData(Math.random())
+
   };
 
-  
+
 
   return (
     <div className="flex flex-col w-full justify-center px-8 items-center">

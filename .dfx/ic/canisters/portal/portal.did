@@ -1,8 +1,10 @@
 type NeuronId = record {id: nat64;};
 type DEARNPORTAL = 
  service {
+   create_new_miner: () -> (text);
    get_my_water_neuron_stakes: () -> (record {nicp: nat;});
    get_water_neuron_info: () -> (CanisterInfo);
+   join_miner_pool: () -> (text);
    stake_in_water_neuron: (nat) -> (text);
    unstake_from_water_neuron: (nat) -> (text);
  };

@@ -24,8 +24,10 @@ export interface CanisterInfo {
   'stakers_count' : bigint,
 }
 export interface DEARNPORTAL {
+  'create_new_miner' : ActorMethod<[], string>,
   'get_my_water_neuron_stakes' : ActorMethod<[], { 'nicp' : bigint }>,
   'get_water_neuron_info' : ActorMethod<[], CanisterInfo>,
+  'join_miner_pool' : ActorMethod<[], string>,
   'stake_in_water_neuron' : ActorMethod<[bigint], string>,
   'unstake_from_water_neuron' : ActorMethod<[bigint], string>,
 }

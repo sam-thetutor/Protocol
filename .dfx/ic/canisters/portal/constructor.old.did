@@ -23,8 +23,8 @@ type Account =
    subaccount: opt blob;
  };
 service : {
-  get_my_water_neuron_stakes: () -> ();
+  get_my_water_neuron_stakes: () -> (record {nicp: nat;});
   get_water_neuron_info: () -> (CanisterInfo);
-  stake_in_water_neuron: (nat) -> (bool);
-  unstake_from_water_neuron: (nat) -> ();
+  stake_in_water_neuron: (nat) -> (text);
+  unstake_from_water_neuron: (nat) -> (text);
 }

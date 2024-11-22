@@ -22,12 +22,14 @@ export const idlFactory = ({ IDL }) => {
     'stakers_count' : IDL.Nat64,
   });
   const DEARNPORTAL = IDL.Service({
+    'create_new_miner' : IDL.Func([], [IDL.Text], []),
     'get_my_water_neuron_stakes' : IDL.Func(
         [],
         [IDL.Record({ 'nicp' : IDL.Nat })],
         [],
       ),
     'get_water_neuron_info' : IDL.Func([], [CanisterInfo], []),
+    'join_miner_pool' : IDL.Func([], [IDL.Text], []),
     'stake_in_water_neuron' : IDL.Func([IDL.Nat], [IDL.Text], []),
     'unstake_from_water_neuron' : IDL.Func([IDL.Nat], [IDL.Text], []),
   });

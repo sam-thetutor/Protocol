@@ -67,7 +67,10 @@ const [refreshData,setRefreshData] = useState("")
     <nav className="bg-gray-800">
       <div className="mx-10 flex justify-between items-center">
         <div className="text-white text-lg font-bold">
-          <img src={Logo} alt="Logo" className="h-24 w-24" />
+          <img
+          onClick={()=>navigate("/")}
+          
+          src={Logo} alt="Logo" className="h-24 w-24 cursor-pointer" />
         </div>
         <div>
           {user ? (

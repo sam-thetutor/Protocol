@@ -12,6 +12,8 @@ import { useIdentityKit } from "@nfid/identitykit/react";
 import { Principal } from "@dfinity/principal";
 import SaleMiner from "./SaleMiner";
 import { useQuery } from "@tanstack/react-query";
+import { idlFactory as BobMinerIDL } from "../../../Utils/bobminer.did";
+import Marketplace from "./Marketplace";
 
 const agent = new HttpAgent({ host: "https://ic0.app" });
 const _backend = createActor(PORTAL_FACTORY, PortalFactoryIDL, agent);
@@ -37,20 +39,37 @@ const Index = () => {
         // Fetch BOB info
         let info = await _backend.get_bob_info();
         setBobInfo(info);
-        console.log('dd :', info);
+        console.log("dd :", info);
 
         // Fetch user miners if user is logged in
         if (user) {
           let miners = await _backend.get_user_miners(
-            Principal.fromText('nlax3-itogf-zlna4-5h4tp-staqt-pod4l-at4li-fq4wv-kgcbr-4z24y-vqe')
+            Principal.fromText(
+              "nlax3-itogf-zlna4-5h4tp-staqt-pod4l-at4li-fq4wv-kgcbr-4z24y-vqe"
+            )
           );
-          console.log('miners :', miners);
+
           if (miners.length > 0) {
-            setUserMiners(miners.slice(0, 8));
+            let data = [];
+
+            let dd = miners.slice(0, 8);
+            for (const miner of dd) {
+              const _bobminer = createActor(
+                miner.id.toString(),
+                BobMinerIDL,
+                agent
+              );
+              let res = await _bobminer.get_statistics();
+              data.push({ ...miner, ...res });
+            }
+
+            console.log("data :", data);
+
+            setUserMiners(data);
           }
         }
       } catch (error) {
-        console.log('error in fetching data :', error);
+        console.log("error in fetching data :", error);
       } finally {
         setInfoLoading(false);
         setUserMinersLoading(false);
@@ -59,6 +78,9 @@ const Index = () => {
 
     fetchData();
   }, [user, oppId]);
+
+
+
 
   return (
     <div className="flex flex-col md:flex-col px-4 w-full gap-4 justify-center items-center">
@@ -110,9 +132,12 @@ const Index = () => {
           <div className="flex gap-2">
             <NewMiner />
             <JoinPool />
+            <Marketplace/>
           </div>
           <div className="flex flex-col gap-4  w-full justify-center items-center">
-            <h2 className="flex w-full mt-8 items-center justify-center">My Miners</h2>
+            <h2 className="flex w-full mt-8 items-center justify-center">
+              My Miners
+            </h2>
 
             <div className="flex flex-row w-full justify-center items-center">
               {user ? (
@@ -123,6 +148,9 @@ const Index = () => {
                         <tr>
                           <th className="py-2 ">Principal</th>
                           <th className="py-2">Mined Blocks</th>
+                          <th className="py-2">Cycle Balance</th>
+                          <th className="py-2">Cycles burned per minute</th>
+                          {/* <th className="py-2">Hash per minute</th> */}
                           <th className="py-2">Actions</th>
                         </tr>
                       </thead>
@@ -136,9 +164,23 @@ const Index = () => {
                               {Number(miner.mined_blocks)}
                             </td>
                             <td className="border px-4 py-2 text-center">
+                              {(Number(miner.cycle_balance) /1e12).toFixed(4) } T
+                            </td>
+                            <td className="border px-4 py-2 text-center">
+                              {(Number(miner.cycles_burned_per_minute)/1e12).toFixed(4)}T
+                            </td>
+                            {/* <td className="border px-4 py-2 text-center">
+                              {Number(miner.hash_per_minute)}
+                            </td> */}
+
+
+
+
+
+                            <td className="border px-4 py-2 text-center">
                               <div className="flex flex-row gap-2 items-center justify-center">
                                 <UpgradeMiner miner={miner} />
-                                <SaleMiner />
+                                <SaleMiner miner={miner} />
                               </div>
                             </td>
                           </tr>

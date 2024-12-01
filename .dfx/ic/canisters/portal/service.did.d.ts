@@ -24,12 +24,15 @@ export interface CanisterInfo {
   'stakers_count' : bigint,
 }
 export interface DEARNPORTAL {
-  'create_new_miner' : ActorMethod<[], string>,
+  'create_new_bob_miner' : ActorMethod<[], string>,
+  'create_new_bone_miner' : ActorMethod<[string], string>,
   'get_my_water_neuron_stakes' : ActorMethod<[], { 'nicp' : bigint }>,
   'get_water_neuron_info' : ActorMethod<[], CanisterInfo>,
-  'join_miner_pool' : ActorMethod<[], string>,
+  'join_bob_miner_pool' : ActorMethod<[bigint], string>,
+  'join_bone_alliance_group' : ActorMethod<[bigint], string>,
   'stake_in_water_neuron' : ActorMethod<[bigint], string>,
   'unstake_from_water_neuron' : ActorMethod<[bigint], string>,
+  'upgrade_bob_miner' : ActorMethod<[Principal], string>,
 }
 export interface NeuronId { 'id' : bigint }
 export interface _SERVICE extends DEARNPORTAL {}

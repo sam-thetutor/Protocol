@@ -4,7 +4,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        custom: ['boneFont', 'sans-serif'], // Add your custom font here
+      },
+    },
   },
   plugins: [],
 }

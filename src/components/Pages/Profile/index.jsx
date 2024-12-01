@@ -36,6 +36,7 @@ const Index = () => {
       try {
         setDataLoading(true);
         //get the user portal, if user is logged in
+        console.log("user principal : ", user.principal.toString());
         let userPortal = await _backend.get_user_portal(user.principal);
 
 
@@ -46,7 +47,6 @@ const Index = () => {
             owner: Principal.fromText(userPortal),
             subaccount: [],
           });
-
           console.log("balance", Number(balance));
          queryClient.setQueryData(["userPortal"], userPortal);
 

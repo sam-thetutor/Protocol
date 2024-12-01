@@ -1,7 +1,20 @@
+type saleOffer = 
+ record {
+   bidder: principal;
+   price: nat64;
+   time: int;
+ };
 type Result = 
  variant {
    err: text;
    ok: record {portalID: text;};
+ };
+type PortalSale = 
+ record {
+   offers: vec saleOffer;
+   owner: principal;
+   portal_id: text;
+   price: nat64;
  };
 type PortalFactory = 
  service {
@@ -10,9 +23,16 @@ type PortalFactory =
                                  principal;
                                  text;
                                });
+   get_all_portals_for_sale: () -> (vec record {
+                                          text;
+                                          PortalSale;
+                                        });
    get_bob_info: () -> (BobInfo);
+   get_bob_miner_pool_hours_left: (principal) -> (nat64);
+   get_portal_for_sale: (text) -> (PortalSale);
    get_user_miners: (principal) -> (vec Miner);
    get_user_portal: (principal) -> (text);
+   remove_portal_from_sale: (text) -> (text);
    save_user_portal: (principal, text) -> ();
    upgrade_portal: (text) -> (text);
    uploadWasm: (vec nat8) -> (text);

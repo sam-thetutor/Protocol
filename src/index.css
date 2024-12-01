@@ -14,3 +14,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'boneFont'; /* Name your font */
+  src: url('./fonts/albayan-bold.ttf') format('truetype'); /* Path to your font file */
+  font-weight:600; /* Specify the weight */
+  font-style: normal; /* Specify the style */
+}

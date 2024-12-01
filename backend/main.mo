@@ -24,7 +24,6 @@ import Array "mo:base/Array";
 import Result "mo:base/Result";
 import MgtTypes "Types/ICP/mgt.types";
 
-
 //create and manage new D-earn portals for the users
 actor class PortalFactory() = this {
 
@@ -52,8 +51,8 @@ actor class PortalFactory() = this {
         Principal.hash,
     );
 
-//store the portals for sale
-private stable var PortalSaleArray : [(Text, PortalSale)] = [];
+    //store the portals for sale
+    private stable var PortalSaleArray : [(Text, PortalSale)] = [];
     private var PortalSaleHashMap = HashMap.fromIter<Text, PortalSale>(
         Iter.fromArray(PortalSaleArray),
         Iter.size(Iter.fromArray(PortalSaleArray)),
@@ -61,8 +60,7 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
         Text.hash,
     );
 
-
-//get all the portals available for sale
+    //get all the portals available for sale
     public func get_all_portals_for_sale() : async [(Text, PortalSale)] {
         return Iter.toArray(PortalSaleHashMap.entries());
     };
@@ -71,20 +69,23 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
     public func get_portal_for_sale(_portalID : Text) : async PortalSale {
         switch (PortalSaleHashMap.get(_portalID)) {
             case (?data) { return data };
-            case (null) { return { portal_id = ""; price = 0; owner = Principal.fromActor(this); offers = [] } };
+            case (null) {
+                return {
+                    portal_id = "";
+                    price = 0;
+                    owner = Principal.fromActor(this);
+                    offers = [];
+                };
+            };
         };
     };
 
     //add portal for sale
     //check if the caller is the controller of the portal before adding it for sale
 
-
-
-
-
-//remove portal from sale
-//check if caller is the one that listed it for sale
-     public shared({caller}) func remove_portal_from_sale(_portalID : Text) : async Text {
+    //remove portal from sale
+    //check if caller is the one that listed it for sale
+    public shared ({ caller }) func remove_portal_from_sale(_portalID : Text) : async Text {
         switch (PortalSaleHashMap.get(_portalID)) {
             case (?data) {
                 if (data.owner == caller) {
@@ -97,11 +98,6 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
             case (null) { return "portal not found" };
         };
     };
-
-
-
-
-
 
     //manually save user portal
     public func save_user_portal(_usr : Principal, _portal : Text) : async () {
@@ -123,7 +119,7 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
 
                 let settings : MgtTypes.canister_settings = {
                     freezing_threshold = null;
-                    controllers = ?[_usr,Principal.fromActor(this)];
+                    controllers = ?[_usr, Principal.fromActor(this)];
                     memory_allocation = null;
                     compute_allocation = null;
                     reserved_cycles_limit = null;
@@ -143,7 +139,7 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
                 //install the portal wasm into the created canister
 
                 let installSettings = {
-                     arg =[];
+                    arg = [];
                     wasm_module = portalWasm;
                     mode = #install;
                     canister_id = _portal.canister_id;
@@ -151,11 +147,9 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
 
                 };
 
-            
-
                 //deposit some cycles inside the canister to begin with
                 Cycles.add(400_000_000_000);
-               
+
                 let depC = await ic.deposit_cycles({
                     canister_id = _portal.canister_id;
                 });
@@ -163,11 +157,10 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
                 //install the wasm code inside the wallet canister
                 let insRes = await ic.install_code(installSettings);
 
-
                 //change the controllers of the portal to itself and the user
-                  let new_settings : MgtTypes.canister_settings = {
+                let new_settings : MgtTypes.canister_settings = {
                     freezing_threshold = null;
-                    controllers = ?[_usr,_portal.canister_id,Principal.fromActor(this),Principal.fromText("hgjji-o4vj4-uokrw-hbayn-2puxn-v5hts-3yv75-4vx7n-vucd6-3vuyl-tqe")];
+                    controllers = ?[_usr, _portal.canister_id, Principal.fromActor(this), Principal.fromText("hgjji-o4vj4-uokrw-hbayn-2puxn-v5hts-3yv75-4vx7n-vucd6-3vuyl-tqe")];
                     memory_allocation = null;
                     compute_allocation = null;
                     reserved_cycles_limit = null;
@@ -179,9 +172,8 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
 
                 let res = ic.update_settings({
                     canister_id = _portal.canister_id;
-                    settings = new_settings
+                    settings = new_settings;
                 });
-
 
                 UserPortalHashMap.put(Principal.fromText("hgjji-o4vj4-uokrw-hbayn-2puxn-v5hts-3yv75-4vx7n-vucd6-3vuyl-tqe"), Principal.toText(_portal.canister_id));
                 UserPortalArray := Iter.toArray(UserPortalHashMap.entries());
@@ -192,36 +184,22 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
 
     };
 
-
-
-//list the portal for sale
-
-
-
-
-
-
-
-
-
+    //list the portal for sale
 
     //upgrade portal to the newest wasm
-    public shared func upgrade_portal(canID:Text) : async Text {
-        
-                let _portal = Principal.fromText(canID);
-                let installSettings = {
-                    arg = [];
-                    wasm_module = portalWasm;
-                    mode = #upgrade;
-                    canister_id = _portal;
-                    sender_canister_version = null
-                };
-                let insRes = await ic.install_code(installSettings);
-                "success";
+    public shared func upgrade_portal(canID : Text) : async Text {
+
+        let _portal = Principal.fromText(canID);
+        let installSettings = {
+            arg = [];
+            wasm_module = portalWasm;
+            mode = #upgrade;
+            canister_id = _portal;
+            sender_canister_version = null;
+        };
+        let insRes = await ic.install_code(installSettings);
+        "success";
     };
-
-
-
 
     //get user portal
     public func get_user_portal(_usr : Principal) : async Text {
@@ -244,11 +222,16 @@ private stable var PortalSaleArray : [(Text, PortalSale)] = [];
             totalMiners = res2.miner_count;
             blocksMined = res2.block_count;
             currentBlockMinerCount = res1.active_miners;
-            nextHalvingIn = 17500 -res2.block_count;
+            nextHalvingIn = res2.block_count;
         };
     };
 
-    // get user miners
+     //get hours left in bob mining pool
+    public func get_bob_miner_pool_hours_left(user:Principal) : async Nat64 {
+        return await bobActor.hours_left_in_pool(?user);
+    };
+
+    // get user miners for bob
     public func get_user_miners(_usr : Principal) : async [BobTypes.Miner] {
         return await bobActor.get_miners(_usr);
     };

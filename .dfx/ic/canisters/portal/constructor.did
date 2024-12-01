@@ -1,4 +1,4 @@
-type Account = record { owner : principal; subaccount : opt vec nat8 };
+type Account = record { owner : principal; subaccount : opt blob };
 type CanisterInfo = record {
   neuron_6m_account : Account;
   latest_distribution_icp_per_vp : opt float64;
@@ -17,12 +17,15 @@ type CanisterInfo = record {
   stakers_count : nat64;
 };
 type DEARNPORTAL = service {
-  create_new_miner : () -> (text);
+  create_new_bob_miner : () -> (text);
+  create_new_bone_miner : (text) -> (text);
   get_my_water_neuron_stakes : () -> (record { nicp : nat });
   get_water_neuron_info : () -> (CanisterInfo);
-  join_miner_pool : () -> (text);
+  join_bob_miner_pool : (nat) -> (text);
+  join_bone_alliance_group : (nat64) -> (text);
   stake_in_water_neuron : (nat) -> (text);
   unstake_from_water_neuron : (nat) -> (text);
+  upgrade_bob_miner : (principal) -> (text);
 };
 type NeuronId = record { id : nat64 };
 service : () -> DEARNPORTAL

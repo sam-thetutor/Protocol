@@ -8,12 +8,23 @@ type Miner = record { id : principal; mined_blocks : nat64 };
 type PortalFactory = service {
   create_user_portal : () -> (Result);
   get_all_portals : () -> (vec record { principal; text });
+  get_all_portals_for_sale : () -> (vec record { text; PortalSale });
   get_bob_info : () -> (BobInfo);
+  get_bob_miner_pool_hours_left : (principal) -> (nat64);
+  get_portal_for_sale : (text) -> (PortalSale);
   get_user_miners : (principal) -> (vec Miner);
   get_user_portal : (principal) -> (text);
+  remove_portal_from_sale : (text) -> (text);
   save_user_portal : (principal, text) -> ();
   upgrade_portal : (text) -> (text);
-  uploadWasm : (vec nat8) -> (text);
+  uploadWasm : (blob) -> (text);
+};
+type PortalSale = record {
+  portal_id : text;
+  owner : principal;
+  offers : vec saleOffer;
+  price : nat64;
 };
 type Result = variant { ok : record { portalID : text }; err : text };
+type saleOffer = record { time : int; price : nat64; bidder : principal };
 service : () -> PortalFactory

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Marketplace = () => {
   return (
-    <div>
+    <div className='flex w-full justify-center flex-col items-center'>
       Marketplace
     </div>
   )

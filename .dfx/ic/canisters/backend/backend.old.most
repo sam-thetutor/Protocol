@@ -1,10 +1,17 @@
 // Version: 1.0.0
-type PortalSale =
-  {offers : [saleOffer]; owner : Principal; portal_id : Text; price : Nat64};
-type PortalSale__1 = PortalSale;
-type saleOffer = {bidder : Principal; price : Nat64; time : Int};
+type BidOffer = {bid_id : Nat; bidder : Principal; price : Nat64; time : Int};
+type MinerSale =
+  {
+    miner_id : Text;
+    miner_type : MinerType;
+    offers : [BidOffer];
+    owner : Principal;
+    price : Nat64
+  };
+type MinerSale__1 = MinerSale;
+type MinerType = {#BOB; #BONE};
 actor {
-  stable var PortalSaleArray : [(Text, PortalSale__1)];
+  stable var MinerSaleArray : [(Text, MinerSale__1)];
   stable var UserPortalArray : [(Principal, Text)];
   stable var portalWasm : [Nat8]
 };

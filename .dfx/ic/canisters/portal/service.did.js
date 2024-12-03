@@ -29,6 +29,11 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Record({ 'nicp' : IDL.Nat })],
         [],
       ),
+    'get_user_activity_logs' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Record({ 'time' : IDL.Int, 'description' : IDL.Text }))],
+        [],
+      ),
     'get_water_neuron_info' : IDL.Func([], [CanisterInfo], []),
     'join_bob_miner_pool' : IDL.Func([IDL.Nat], [IDL.Text], []),
     'join_bone_alliance_group' : IDL.Func([IDL.Nat64], [IDL.Text], []),

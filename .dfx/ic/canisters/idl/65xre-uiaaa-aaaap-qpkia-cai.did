@@ -1,41 +1,42 @@
-type saleOffer = 
- record {
-   bidder: principal;
-   price: nat64;
-   time: int;
- };
 type Result = 
  variant {
    err: text;
    ok: record {portalID: text;};
  };
-type PortalSale = 
- record {
-   offers: vec saleOffer;
-   owner: principal;
-   portal_id: text;
-   price: nat64;
- };
 type PortalFactory = 
  service {
+   add_miner_for_sale: (principal) -> (vec principal);
    create_user_portal: () -> (Result);
+   get_all_miners_for_sale: () -> (vec record {
+                                         text;
+                                         MinerSale;
+                                       });
    get_all_portals: () -> (vec record {
                                  principal;
                                  text;
                                });
-   get_all_portals_for_sale: () -> (vec record {
-                                          text;
-                                          PortalSale;
-                                        });
    get_bob_info: () -> (BobInfo);
    get_bob_miner_pool_hours_left: (principal) -> (nat64);
-   get_portal_for_sale: (text) -> (PortalSale);
+   get_miners_for_sale: (text) -> (opt MinerSale);
    get_user_miners: (principal) -> (vec Miner);
    get_user_portal: (principal) -> (text);
-   remove_portal_from_sale: (text) -> (text);
+   remove_miner_from_sale: (text) -> (text);
    save_user_portal: (principal, text) -> ();
    upgrade_portal: (text) -> (text);
    uploadWasm: (vec nat8) -> (text);
+ };
+type MinerType = 
+ variant {
+   BOB;
+   BONE;
+ };
+type MinerSale = 
+ record {
+   miner_id: text;
+   miner_type: MinerType;
+   offers: vec BidOffer;
+   owner: principal;
+   price: nat64;
  };
 type Miner = 
  record {
@@ -48,5 +49,12 @@ type BobInfo =
    currentBlockMinerCount: nat64;
    nextHalvingIn: nat64;
    totalMiners: nat64;
+ };
+type BidOffer = 
+ record {
+   bid_id: nat;
+   bidder: principal;
+   price: nat64;
+   time: int;
  };
 service : () -> PortalFactory

@@ -5,6 +5,7 @@ import Home from "./components/Pages/Home";
 import OpportunityDetails from "./components/Pages/OpportunityDetails";
 import Admin from "./components/Pages/Admin";
 import Profile from "./components/Pages/Profile";
+import Marketplace from "./components/Pages/Marketplace/Marketplace";
 function App() {
   return (
     <>
@@ -12,6 +13,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/marketplace" element={<Marketplace />} />
+
+
         <Route path="/profile" element={<Profile />} />
 
 

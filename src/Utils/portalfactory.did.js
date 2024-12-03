@@ -3,16 +3,19 @@ export const idlFactory = ({ IDL }) => {
     'ok' : IDL.Record({ 'portalID' : IDL.Text }),
     'err' : IDL.Text,
   });
-  const saleOffer = IDL.Record({
+  const BidOffer = IDL.Record({
     'time' : IDL.Int,
     'price' : IDL.Nat64,
+    'bid_id' : IDL.Nat,
     'bidder' : IDL.Principal,
   });
-  const PortalSale = IDL.Record({
-    'portal_id' : IDL.Text,
+  const MinerType = IDL.Variant({ 'BOB' : IDL.Null, 'BONE' : IDL.Null });
+  const MinerSale = IDL.Record({
     'owner' : IDL.Principal,
-    'offers' : IDL.Vec(saleOffer),
+    'offers' : IDL.Vec(BidOffer),
     'price' : IDL.Nat64,
+    'miner_id' : IDL.Text,
+    'miner_type' : MinerType,
   });
   const BobInfo = IDL.Record({
     'blocksMined' : IDL.Nat64,
@@ -25,15 +28,20 @@ export const idlFactory = ({ IDL }) => {
     'mined_blocks' : IDL.Nat64,
   });
   return IDL.Service({
+    'add_miner_for_sale' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(IDL.Principal)],
+        [],
+      ),
     'create_user_portal' : IDL.Func([], [Result], []),
+    'get_all_miners_for_sale' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(IDL.Text, MinerSale))],
+        [],
+      ),
     'get_all_portals' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Principal, IDL.Text))],
-        [],
-      ),
-    'get_all_portals_for_sale' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Tuple(IDL.Text, PortalSale))],
         [],
       ),
     'get_bob_info' : IDL.Func([], [BobInfo], []),
@@ -42,10 +50,10 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Nat64],
         [],
       ),
-    'get_portal_for_sale' : IDL.Func([IDL.Text], [PortalSale], []),
+    'get_miners_for_sale' : IDL.Func([IDL.Text], [IDL.Opt(MinerSale)], []),
     'get_user_miners' : IDL.Func([IDL.Principal], [IDL.Vec(Miner)], []),
     'get_user_portal' : IDL.Func([IDL.Principal], [IDL.Text], []),
-    'remove_portal_from_sale' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'remove_miner_from_sale' : IDL.Func([IDL.Text], [IDL.Text], []),
     'save_user_portal' : IDL.Func([IDL.Principal, IDL.Text], [], []),
     'upgrade_portal' : IDL.Func([IDL.Text], [IDL.Text], []),
     'uploadWasm' : IDL.Func([IDL.Vec(IDL.Nat8)], [IDL.Text], []),

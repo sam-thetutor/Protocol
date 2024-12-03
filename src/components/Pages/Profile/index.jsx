@@ -24,6 +24,7 @@ const Index = () => {
   const [refreshData, setRefreshData] = useState("");
   const [dataLoading, setDataLoading] = useState(false);
   const [newPortalLoading, setNewPortalLoading] = useState(false);
+  const [activityLogs, setActivityLogs] = useState([]);
 
   const authenticatedAgent = useAgent();
   const queryClient = useQueryClient();
@@ -54,6 +55,10 @@ const Index = () => {
             balance: Number(balance),
             id: userPortal,
           });
+
+          // Fetch activity logs
+          const logs = await _backend.get_user_activity_logs();
+          setActivityLogs(logs);
         } else {
           setPortalDetails(null);
         }
@@ -121,6 +126,27 @@ const Index = () => {
             </div>
 
             <h1 className="text-xl ">Balance: {portalDetails?.balance}</h1>
+
+            {/* Activity Logs */}
+            <h2 className="text-lg mt-4">Activity Logs</h2>
+            <table className="table-auto w-full mt-2">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2">Timestamp</th>
+                  <th className="px-4 py-2">Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {activityLogs.map((log, index) => (
+                  <tr key={index}>
+                    <td className="border px-4 py-2">
+                      {new Date(Number(log.time) / 1000000).toLocaleString()}
+                    </td>
+                    <td className="border px-4 py-2">{log.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         ) : (
           <>

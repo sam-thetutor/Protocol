@@ -27,6 +27,10 @@ export interface DEARNPORTAL {
   'create_new_bob_miner' : ActorMethod<[], string>,
   'create_new_bone_miner' : ActorMethod<[string], string>,
   'get_my_water_neuron_stakes' : ActorMethod<[], { 'nicp' : bigint }>,
+  'get_user_activity_logs' : ActorMethod<
+    [],
+    Array<{ 'time' : bigint, 'description' : string }>
+  >,
   'get_water_neuron_info' : ActorMethod<[], CanisterInfo>,
   'join_bob_miner_pool' : ActorMethod<[bigint], string>,
   'join_bone_alliance_group' : ActorMethod<[bigint], string>,

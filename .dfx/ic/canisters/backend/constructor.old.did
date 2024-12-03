@@ -1,19 +1,26 @@
-type saleOffer = 
+type definite_canister_settings = 
  record {
-   bidder: principal;
-   price: nat64;
-   time: int;
+   compute_allocation: nat;
+   controllers: vec principal;
+   freezing_threshold: nat;
+   memory_allocation: nat;
  };
 type Result = 
  variant {
    err: text;
    ok: record {portalID: text;};
  };
-type PortalSale = 
+type MinerType = 
+ variant {
+   BOB;
+   BONE;
+ };
+type MinerSale = 
  record {
-   offers: vec saleOffer;
+   miner_id: text;
+   miner_type: MinerType;
+   offers: vec BidOffer;
    owner: principal;
-   portal_id: text;
    price: nat64;
  };
 type Miner = 
@@ -28,21 +35,30 @@ type BobInfo =
    nextHalvingIn: nat64;
    totalMiners: nat64;
  };
+type BidOffer = 
+ record {
+   bid_id: nat;
+   bidder: principal;
+   price: nat64;
+   time: int;
+ };
 service : {
+  add_miner_for_sale: (principal) -> (definite_canister_settings);
   create_user_portal: () -> (Result);
+  get_all_miners_for_sale: () -> (vec record {
+                                        text;
+                                        MinerSale;
+                                      });
   get_all_portals: () -> (vec record {
                                 principal;
                                 text;
                               });
-  get_all_portals_for_sale: () -> (vec record {
-                                         text;
-                                         PortalSale;
-                                       });
   get_bob_info: () -> (BobInfo);
-  get_portal_for_sale: (text) -> (PortalSale);
+  get_bob_miner_pool_hours_left: (principal) -> (nat64);
+  get_miners_for_sale: (text) -> (opt MinerSale);
   get_user_miners: (principal) -> (vec Miner);
   get_user_portal: (principal) -> (text);
-  remove_portal_from_sale: (text) -> (text);
+  remove_miner_from_sale: (text) -> (text);
   save_user_portal: (principal, text) -> ();
   upgrade_portal: (text) -> (text);
   uploadWasm: (vec nat8) -> (text);

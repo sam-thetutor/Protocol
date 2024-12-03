@@ -7,7 +7,7 @@ const SaleMiner = ({miner}) => {
 const [buttonLoading, setButtonLoading] = useState(false);
 
   const saleMiner = async () => {
-    console.log("sale miner");
+    console.log("sale miner",miner);
 
   }
 
@@ -22,26 +22,26 @@ const [buttonLoading, setButtonLoading] = useState(false);
   {/* add modal to allow user specify the price of the miner */}
 
   {isModalOpen && (
-    <div className="fixed inset-0 p-4 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="fixed inset-0 p-4  flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-[#252525] flex flex-col rounded-lg shadow-lg text-white  p-6 w-96">
-        <h2 className="text-2xl">Sale Miner</h2>
-        <input
+      <h1 className="flex w-full justify-center ">Sale Miner</h1>
+      <input
           type="number"
-          placeholder="Enter price"
+          placeholder="enter price in icp"
           className="bg-gray-800 text-white px-4 py-2 rounded-lg mt-4"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
-         <div className="flex flex-row  w-full items-center justify-end  gap-3">
+         <div className="flex flex-row mt-2  w-full items-center justify-end  gap-3">
                 <button
-                  className="bg-red-400 text-white p-1 rounded-md "
-                  onClick={() => setIsModalOpen(false)}
+                className="border cursor-pointer text-sm bg-red-400 p-1 rounded-md"
+                onClick={() => setIsModalOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="bg-green-500 flex justify-center items-center text-white p-1 rounded-md"
-                  onClick={saleMiner}
+                className="border justify-center items-center flex text-sm bg-green-500 cursor-pointer p-1 rounded-md"
+                onClick={saleMiner}
                 >
                   {buttonLoading ? (
                     <ClipLoader color="white" size={20} />

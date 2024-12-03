@@ -64,7 +64,7 @@ const [refreshData,setRefreshData] = useState("")
   // }, [user,refreshData]);
 
   return (
-    <nav className="bg-gray-800">
+    <nav className="bg-gray-800 ">
       <div className="mx-10 flex justify-between items-center">
         <div className="text-white text-lg font-bold">
           <img
@@ -72,7 +72,11 @@ const [refreshData,setRefreshData] = useState("")
           
           src={Logo} alt="Logo" className="h-24 w-24 cursor-pointer" />
         </div>
-        <div>
+        <div className="flex flex-row gap-8 justify-center items-center">
+
+          <div
+          onClick={()=>navigate("marketplace")}
+           className="text-white cursor-pointer ">Marketplace</div>
           {user ? (
             <div className="relative">
               <FaUserCircle

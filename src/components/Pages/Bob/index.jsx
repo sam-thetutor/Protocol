@@ -13,7 +13,7 @@ import { Principal } from "@dfinity/principal";
 import SaleMiner from "./SaleMiner";
 import { useQuery } from "@tanstack/react-query";
 import { idlFactory as BobMinerIDL } from "../../../Utils/bobminer.did";
-import Marketplace from "./Marketplace";
+import Marketplace from "../Marketplace/Marketplace";
 
 const agent = new HttpAgent({ host: "https://ic0.app" });
 const _backend = createActor(PORTAL_FACTORY, PortalFactoryIDL, agent);

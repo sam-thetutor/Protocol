@@ -20,6 +20,9 @@ type DEARNPORTAL = service {
   create_new_bob_miner : () -> (text);
   create_new_bone_miner : (text) -> (text);
   get_my_water_neuron_stakes : () -> (record { nicp : nat });
+  get_user_activity_logs : () -> (
+      vec record { time : int; description : text },
+    );
   get_water_neuron_info : () -> (CanisterInfo);
   join_bob_miner_pool : (nat) -> (text);
   join_bone_alliance_group : (nat64) -> (text);

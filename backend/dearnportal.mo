@@ -45,7 +45,19 @@ actor class DEARNPORTAL() = this {
     let IcpActor = actor (ICP_CANISTER_ID) : IcpTypes.Self;
     let NicpActor = actor (WATER_NEURON_NICP_CANISTER_ID) : NicpTypes.Self;
 
+  
+  
+  
+  
+  
+  
     private var recurringStaking = TrieMap.TrieMap<Text, MainTypes.RecurringWtrNeuronStake>(Text.equal, Text.hash);
+
+
+
+
+
+
 
     //create new Miner
     public func create_new_bob_miner() : async Text {
@@ -347,7 +359,7 @@ actor class DEARNPORTAL() = this {
         };
     };
 
-    
+
 
 
 };

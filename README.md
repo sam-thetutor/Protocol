@@ -1,61 +1,70 @@
-
 # 🚀 Dearn Protocol
 
-Dearn protocol is a crosschain asset management platform built on the Internet Computer. It allows users to invest, track and manage their assets across the different platforms all in one place. 
+Dearn protocol is a crosschain asset management platform built on the Internet Computer. It allows users to invest, track and manage their assets across the different platforms all in one place.
 
+## 🔧 Technical Architecture
 
-## 🔧 Technical 
+![architecture image](./src/assets/architecture.png)
 
-The application consists of mainly three canisters.
-- **Frontend**: Displays the UI that allows the user to interact with the application
+The application consists of mainly three components.
+
 - **Backend** : Responsible for creating and managing `Portals` for the users.
 
-- **Portal** : A new portal is created for each new user that joins the platform
-    - The portal is a dedicated smart contract that is fully under the control of the user. It is like a command center that allows the user to manage their assets. 
+- **Portal** : 
+  - The portal is a dedicated smart contract that is fully under the control of the user. It is like a command center that allows the user to manage their assets.
 
-    - The portal houses all the required functionality and intergation to the different platforms and networks. This allows the user to invest in assets from the different platforms and networks without the need for manually visiting the platforms. All that can be done within the portal. An example, here is that the user can provide liquidity on a pair on ICPSwap all in the Portal without ever visiting the ICPSwap website.
+  - The portal houses all the required functionality and intergation to the different platforms and networks. This allows the user to invest in assets from the different platforms and networks without the need for manually visiting the platforms. Everything is managed within the portal.
+   An example, here is that the user can provide liquidity on a pair on ICPSwap all in the Portal without ever visiting the ICPSwap website.
 
+- **Integration Modules**
+  These modules are inside each individual portal and are responsible for connecting to the external platforms like icpswap, nns, even to external blockchains to allow the user to invest and manage assets on that platform. When a new platform is integrated on the protocol, users are notified to upgrade their portals in order to add the new modules to their portals
 
 ## ✨ Features
-- Crosschain integration
-- Cross platform integration
-- 
 
+- Cross platform integration
+-
 
 ## 🛠 Technology Stack
-- Backend(Motoko) 
+
+- Backend(Motoko)
 - Frontend(React)
 - Authentication(IdentityKit)
 
 ## 🚀 Getting Started
+
 Ensure that you have node and dfx installed on your machine
+
 1. Clone the repository
+
 ```bash
 git clone https://github.com/Protocol
 cd Protocol
 ```
+
 2. Install the dependencies
 
 ```bash
 npm install
 ```
+
 3. Deploy the canisters
-````bash
-dfx deploy 
-````
+
+```bash
+dfx deploy
+```
 
 4. start the server
 
-````bash
+```bash
 npm start
-````
+```
 
 ## 📋 To Do
+
 - Advanced Analytics for the user
 - Crosschain asset management
-- 
-
-
+-
 
 ## ⚠️ Disclaimer
+
 This project is still in its early stages of development, Interact with caution.

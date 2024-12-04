@@ -26,28 +26,11 @@ import BoneTypes "Types/BONE/Bone.types";
 
 actor class DEARNPORTAL() = this {
 
+
     type RecurringWtrNeuronStake = MainTypes.RecurringWtrNeuronStake;
 
-    type Activity = {
-        timestamp : Time.Time;
-        description : Text;
-    };
 
-    private var activities = Buffer.Buffer<{ description : Text; time : Int }>(0);
-
-    private func logActivity(description : Text) {
-        let timestamp = Time.now();
-        activities.add({ description = description; time = timestamp });
-    };
-
-    public func get_user_activity_logs() : async [{
-        description : Text;
-        time : Int;
-    }] {
-        return Buffer.toArray(activities);
-    };
-
-    let PORTALFACTORY_CANISTER_ID : Text = "";
+    let PORTALFACTORY_CANISTER_ID :Text = "";
     let WATER_NEURON_CANISTER_ID : Text = "tsbvt-pyaaa-aaaar-qafva-cai";
     let WATER_NEURON_NICP_CANISTER_ID : Text = "buwm7-7yaaa-aaaar-qagva-cai";
     let ICP_CANISTER_ID : Text = "ryjl3-tyaaa-aaaaa-aaaba-cai";
@@ -88,7 +71,6 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.spawn_miner(100000000);
                 switch (results) {
                     case (#Ok(prin)) {
-                        logActivity("Created new BOB miner");
                         return "miner created successfully";
                     };
                     case (#Err(err)) {
@@ -102,11 +84,19 @@ actor class DEARNPORTAL() = this {
         };
     };
 
+
     //list the bob  miner for sale
 
     // public shared({caller}) func list_miner_for_sale():async Text{
     //     //call the backend to list the miner for sale
     // };
+
+
+
+
+
+
+
 
     //upgrade bob miner
     public func upgrade_bob_miner(_miner : Principal) : async Text {
@@ -132,7 +122,6 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.upgrade_miner(_miner);
                 switch (results) {
                     case (#Ok) {
-                        logActivity("Upgraded BOB miner");
                         return "miner upgraded successfully";
                     };
                     case (#Err(err)) {
@@ -141,7 +130,7 @@ actor class DEARNPORTAL() = this {
                 };
             };
             case (#Err(err)) {
-                return "failed to approve the bob actor to spend the icp";
+                return "failed to approve the bob actor to spend the icp"
             };
         };
     };
@@ -167,7 +156,6 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.join_pool(Nat64.fromNat(amount));
                 switch (results) {
                     case (#Ok) {
-                        logActivity("Joined BOB miner pool");
                         return "joined the miner pool";
                     };
                     case (#Err(err)) {
@@ -208,7 +196,6 @@ actor class DEARNPORTAL() = this {
                 let results = await boneActor.create_dog(_name);
                 switch (results) {
                     case (#Ok(prin)) {
-                        logActivity("Created new BONE miner");
                         return "miner created successfully";
                     };
                     case (#Err(err)) {
@@ -244,7 +231,6 @@ actor class DEARNPORTAL() = this {
                 let results = await boneActor.join_alliance(Principal.fromActor(this), alliance_id);
                 switch (results) {
                     case (#Ok) {
-                        logActivity("Joined BONE alliance group");
                         return "joined the alliance group";
                     };
                     case (#Err(err)) {
@@ -294,7 +280,7 @@ actor class DEARNPORTAL() = this {
 
                 switch (stakeResults) {
                     case (#Ok(depSuccess)) {
-                        logActivity("Staked in Water Neuron");
+
                         return "staking success";
                     };
                     case (_) { return "staking failed" };
@@ -334,7 +320,7 @@ actor class DEARNPORTAL() = this {
 
                 switch (stakeResults) {
                     case (#Ok(depSuccess)) {
-                        logActivity("Unstaked from Water Neuron");
+
                         return "staking success";
                     };
                     case (_) { return "staking failed" };
@@ -361,13 +347,7 @@ actor class DEARNPORTAL() = this {
         };
     };
 
-    //------------------------Automate staking in the water neuron according to the scheduled time---------------------
+    
 
-    //initialize settings
-    //fetch the controllers and save them in the hashMap
-
-    // public func initialize():async (){
-    //     let results = await
-    // }
 
 };

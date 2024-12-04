@@ -72,13 +72,9 @@ actor class PortalFactory() = this {
     //add miner for sale
 
     public shared({caller}) func add_miner_for_sale(_minerID :Principal ) : async [Principal] {
-        
         try{
             let res = await ic.canister_status({canister_id = _minerID});
-        
         return res.settings.controllers;
-        
-            
         }catch(error){
             return []
         }

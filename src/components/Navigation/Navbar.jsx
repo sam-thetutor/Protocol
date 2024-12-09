@@ -9,12 +9,13 @@ import { idlFactory as PortalFactoryIDL } from "../../Utils/portalfactory.did";
 import { Principal } from "@dfinity/principal";
 import { idlFactory as ICPDL } from "../../Utils/icp.did";
 import { useNavigate } from "react-router-dom";
+import { LuLogOut } from "react-icons/lu";
 const agent = new HttpAgent({ host: "https://ic0.app" });
 const _backend = createActor(PORTAL_FACTORY, PortalFactoryIDL, agent);
 let icpActor = createActor(ICP_LEDGER_ID, ICPDL, agent);
 
 const Navbar = () => {
-  const { connect, user } = useIdentityKit();
+  const { connect, user,disconnect } = useIdentityKit();
   const navigate = useNavigate()
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [portalDetails, setPortalDetails] = useState(null);
@@ -78,45 +79,13 @@ const [refreshData,setRefreshData] = useState("")
           onClick={()=>navigate("marketplace")}
            className="text-white cursor-pointer ">Marketplace</div>
           {user ? (
-            <div className="relative">
+            <div className="flex flex-row gap-6 justify-center items-center">
+
               <FaUserCircle
                 className="text-white text-3xl cursor-pointer"
                 onClick={()=>navigate("/profile")}
-              />
-              {isModalOpen && (
-                <div className="fixed inset-0  flex items-center justify-center bg-black bg-opacity-50">
-                 
-                 {
-                  user && portalDetails ?
-                  
-                  
-                  <div className="bg-white rounded-lg shadow-lg p-4 w-64">
-                    <div className="flex justify-between items-center mb-4">
-                      <h2 className="text-lg font-bold">Portal</h2>
-                      <button
-                        className="text-gray-600 hover:text-gray-800"
-                        onClick={handleCloseModal}
-                        >
-                        &times;
-                      </button>
-                    </div>
-
-                    <p>
-                      <strong>Address:</strong> {portalDetails?.id}
-                    </p>
-                    <p>
-                      <strong>Balance:</strong> {portalDetails?.balance}
-                    </p>
-                  </div>
-                  :
-                  <div>create Portal</div>
-
-}
-
-
-
-                </div>
-              )}
+                />
+            <LuLogOut className="cursor-pointer" color="white" onClick={()=>disconnect()} size={23} />
             </div>
           ) : (
             <button

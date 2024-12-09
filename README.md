@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# 🚀 Dearn Protocol
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Dearn protocol is a crosschain asset management platform built on the Internet Computer. It allows users to invest, track and manage their assets across the different platforms all in one place.
 
-## Available Scripts
+## 🔧 Technical Architecture
 
-In the project directory, you can run:
+![architecture image](./src/assets/architecture.png)
 
-### `npm start`
+The application consists of mainly three components.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Backend** : Responsible for creating and managing `Portals` for the users.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Portal** :
 
-### `npm test`
+  - The portal is a dedicated smart contract that is fully under the control of the user. It is like a command center that allows the user to manage their assets across the different platforms and networks
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  - The portal houses all the required functionality and intergation to the different platforms and networks. This allows the user to invest in assets from the different platforms and networks without the need for manually visiting the platforms. Everything is managed within the portal.
+    An example, here is that the user can provide liquidity on a pair on ICPSwap all in the Portal without ever visiting the ICPSwap website.
 
-### `npm run build`
+- **Integration Modules**
+  These modules are inside each individual portal and are responsible for connecting to the external platforms like icpswap, nns, even to external blockchains to allow the user to invest and manage assets on that platform. When a new module is integrated on the protocol, users are notified to manually upgrade their portals in order to add the new modules to their portals
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠 Technology Stack
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Backend(Motoko)
+- Frontend(React)
+- Authentication(IdentityKit)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 📋 To Do
 
-### `npm run eject`
+- Advanced Analytics for the user
+- Crosschain asset management
+- Automate recurring asset purchase and sale
+- More trading strategies
+- Integrate more platforms in the protocol
+- Marketplace to enable trading different miners
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🚀 Getting Started
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Ensure that you have node and dfx installed on your machine
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone the repository
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+git clone https://github.com/Protocol
+cd Protocol
+```
 
-## Learn More
+2. Install the dependencies
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Deploy the canisters
 
-### Code Splitting
+```bash
+dfx deploy
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+4. start the server
 
-### Analyzing the Bundle Size
+```bash
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## ⚠️ Disclaimer
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is still in its early stages of development, Interact with caution.

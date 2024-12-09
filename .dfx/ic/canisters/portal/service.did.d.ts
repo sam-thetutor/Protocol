@@ -6,6 +6,12 @@ export interface Account {
   'owner' : Principal,
   'subaccount' : [] | [Uint8Array | number[]],
 }
+export interface BobAnalytics {
+  'minersUpgrades' : bigint,
+  'icpSpent' : bigint,
+  'minersCreated' : bigint,
+  'totalHrsInPool' : bigint,
+}
 export interface CanisterInfo {
   'neuron_6m_account' : Account,
   'latest_distribution_icp_per_vp' : [] | [number],
@@ -26,11 +32,10 @@ export interface CanisterInfo {
 export interface DEARNPORTAL {
   'create_new_bob_miner' : ActorMethod<[], string>,
   'create_new_bone_miner' : ActorMethod<[string], string>,
+  'get_all_portal_investments' : ActorMethod<[], Array<[string, bigint]>>,
+  'get_bob_analytics' : ActorMethod<[], BobAnalytics>,
+  'get_bone_analytics' : ActorMethod<[], BobAnalytics>,
   'get_my_water_neuron_stakes' : ActorMethod<[], { 'nicp' : bigint }>,
-  'get_user_activity_logs' : ActorMethod<
-    [],
-    Array<{ 'time' : bigint, 'description' : string }>
-  >,
   'get_water_neuron_info' : ActorMethod<[], CanisterInfo>,
   'join_bob_miner_pool' : ActorMethod<[bigint], string>,
   'join_bone_alliance_group' : ActorMethod<[bigint], string>,

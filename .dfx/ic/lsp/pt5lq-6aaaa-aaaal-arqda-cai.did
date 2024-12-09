@@ -1,4 +1,10 @@
 type Account = record { owner : principal; subaccount : opt blob };
+type BobAnalytics = record {
+  minersUpgrades : nat;
+  icpSpent : nat;
+  minersCreated : nat;
+  totalHrsInPool : nat;
+};
 type CanisterInfo = record {
   neuron_6m_account : Account;
   latest_distribution_icp_per_vp : opt float64;
@@ -19,10 +25,10 @@ type CanisterInfo = record {
 type DEARNPORTAL = service {
   create_new_bob_miner : () -> (text);
   create_new_bone_miner : (text) -> (text);
+  get_all_portal_investments : () -> (vec record { text; nat }) query;
+  get_bob_analytics : () -> (BobAnalytics);
+  get_bone_analytics : () -> (BobAnalytics);
   get_my_water_neuron_stakes : () -> (record { nicp : nat });
-  get_user_activity_logs : () -> (
-      vec record { time : int; description : text },
-    );
   get_water_neuron_info : () -> (CanisterInfo);
   join_bob_miner_pool : (nat) -> (text);
   join_bone_alliance_group : (nat64) -> (text);

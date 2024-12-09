@@ -70,15 +70,10 @@ actor class PortalFactory() = this {
     };
 
     //add miner for sale
-
     public shared({caller}) func add_miner_for_sale(_minerID :Principal ) : async [Principal] {
-        
         try{
             let res = await ic.canister_status({canister_id = _minerID});
-        
         return res.settings.controllers;
-        
-            
         }catch(error){
             return []
         }
@@ -190,7 +185,7 @@ actor class PortalFactory() = this {
                 //change the controllers of the portal to itself and the user
                 let new_settings : MgtTypes.canister_settings = {
                     freezing_threshold = null;
-                    controllers = ?[_usr, _portal.canister_id, Principal.fromActor(this), Principal.fromText("hgjji-o4vj4-uokrw-hbayn-2puxn-v5hts-3yv75-4vx7n-vucd6-3vuyl-tqe")];
+                    controllers = ?[_usr, _portal.canister_id, Principal.fromActor(this)];
                     memory_allocation = null;
                     compute_allocation = null;
                     reserved_cycles_limit = null;
@@ -205,7 +200,7 @@ actor class PortalFactory() = this {
                     settings = new_settings;
                 });
 
-                UserPortalHashMap.put(Principal.fromText("hgjji-o4vj4-uokrw-hbayn-2puxn-v5hts-3yv75-4vx7n-vucd6-3vuyl-tqe"), Principal.toText(_portal.canister_id));
+                UserPortalHashMap.put(_usr, Principal.toText(_portal.canister_id));
                 UserPortalArray := Iter.toArray(UserPortalHashMap.entries());
                 #ok({ portalID = Principal.toText(_portal.canister_id) });
 

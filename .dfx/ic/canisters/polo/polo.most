@@ -1,0 +1,25 @@
+// Version: 1.0.0
+type Claim =
+  {
+    claimant : Principal;
+    description : Text;
+    medicalReports : Blob;
+    policyNumber : Text;
+    receipts : Blob;
+    status : Text
+  };
+type Loan = {amount : Nat; apy : Float; borrower : Principal; status : Text};
+type Policy =
+  {
+    conditions : Text;
+    monthlyFee : Nat;
+    owner : Principal;
+    plan : Text;
+    term : Nat
+  };
+actor {
+  stable var claims : [Claim];
+  stable var loans : [Loan];
+  stable var policies : [Policy];
+  stable var pooledFunds : Nat
+};

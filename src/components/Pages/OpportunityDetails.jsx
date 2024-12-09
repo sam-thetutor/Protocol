@@ -4,6 +4,7 @@ import BobIndex from "../Pages/Bob";
 import Bone from "../Pages/Bone";
 import WaterNeuron from "../Pages/WaterNeuron";
 import ICPSwap from "../Pages/ICPSwap";
+import Kongswap from "../Pages/Kongswap/Index";
 
 const OpportunityDetails = () => {
   const { oppId } = useParams();
@@ -13,6 +14,7 @@ const OpportunityDetails = () => {
       {oppId === "bonefun" && <Bone />}
       {oppId === "waterneuron" && <WaterNeuron />}
       {oppId === "icpswap" && <ICPSwap />}
+      {oppId === "kongswap" && <Kongswap />}
     </>
   );
 };

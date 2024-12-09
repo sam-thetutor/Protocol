@@ -5,6 +5,7 @@ import WaterNeuronLogo from "../../assets/waterneuron.png";
 import BoneLogo from "../../assets/bonelogo.png";
 import IcpSwapLogo from "../../assets/icpswap.png";
 import { GoDotFill } from "react-icons/go";
+import Kongswap from "../../assets/kongswap.png"
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
@@ -42,6 +43,14 @@ const Home = () => {
       opportunities: 1,
       link: "/opportunity/bonefun",
     },
+    {
+      title: "KongSwap",
+      description: "The one stop token shop-Trade tokens across all chains with ease",
+      image: "https://via.placeholder.com/150",
+      logo: Kongswap,
+      opportunities: 2,
+      link: "/opportunity/kongswap",
+    },
   ];
 
   const navigate = useNavigate();
@@ -52,11 +61,11 @@ const Home = () => {
 flex w-full px-4 gap-4 h-[50vh] flex-col justify-center items-center"
     >
       <div className="flex flex-col mt-36 items-center">
-        <h1 className="text-7xl">Dearn Protocol</h1>
+        <h1 className="text-7xl mt-6">Dearn Protocol</h1>
         <span>A cross-chain yield asset management protocol</span>
-        <button onClick={()=>navigate('/admin')}>Admin</button>
+        {/* <button onClick={()=>navigate('/admin')}>Admin</button> */}
       </div>
-      <div className="grid grid-cols-2 mt-36 gap-4 ">
+      <div className="grid grid-cols-2 mt-4  gap-4">
         {cards.map((card, index) => (
           <div
             key={index}

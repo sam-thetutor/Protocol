@@ -1,0 +1,35 @@
+type Policy = 
+ record {
+   conditions: text;
+   monthlyFee: nat;
+   owner: principal;
+   plan: text;
+   term: nat;
+ };
+type Loan = 
+ record {
+   amount: nat;
+   apy: float64;
+   borrower: principal;
+   status: text;
+ };
+type Claim = 
+ record {
+   claimant: principal;
+   description: text;
+   medicalReports: blob;
+   policyNumber: text;
+   receipts: blob;
+   status: text;
+ };
+service : {
+  addFunds: (nat) -> (text);
+  borrowFunds: (nat, float64) -> (text);
+  buyPolicy: (text, nat, nat, text) -> (text);
+  fileClaim: (text, text, blob, blob) -> (text);
+  repayLoan: (nat) -> (text);
+  viewActiveLoans: () -> (vec Loan) query;
+  viewClaims: () -> (vec Claim) query;
+  viewPolicies: () -> (vec Policy) query;
+  viewPooledFunds: () -> (nat) query;
+}

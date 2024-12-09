@@ -1,4 +1,10 @@
 export const idlFactory = ({ IDL }) => {
+  const BobAnalytics = IDL.Record({
+    'minersUpgrades' : IDL.Nat,
+    'icpSpent' : IDL.Nat,
+    'minersCreated' : IDL.Nat,
+    'totalHrsInPool' : IDL.Nat,
+  });
   const Account = IDL.Record({
     'owner' : IDL.Principal,
     'subaccount' : IDL.Opt(IDL.Vec(IDL.Nat8)),
@@ -24,14 +30,16 @@ export const idlFactory = ({ IDL }) => {
   const DEARNPORTAL = IDL.Service({
     'create_new_bob_miner' : IDL.Func([], [IDL.Text], []),
     'create_new_bone_miner' : IDL.Func([IDL.Text], [IDL.Text], []),
+    'get_all_portal_investments' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat))],
+        ['query'],
+      ),
+    'get_bob_analytics' : IDL.Func([], [BobAnalytics], []),
+    'get_bone_analytics' : IDL.Func([], [BobAnalytics], []),
     'get_my_water_neuron_stakes' : IDL.Func(
         [],
         [IDL.Record({ 'nicp' : IDL.Nat })],
-        [],
-      ),
-    'get_user_activity_logs' : IDL.Func(
-        [],
-        [IDL.Vec(IDL.Record({ 'time' : IDL.Int, 'description' : IDL.Text }))],
         [],
       ),
     'get_water_neuron_info' : IDL.Func([], [CanisterInfo], []),

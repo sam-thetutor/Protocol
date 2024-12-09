@@ -132,7 +132,7 @@ const Index = () => {
           <div className="flex gap-2">
             <NewMiner />
             <JoinPool />
-            <Marketplace/>
+            {/* <Marketplace/> */}
           </div>
           <div className="flex flex-col gap-4  w-full justify-center items-center">
             <h2 className="flex w-full mt-8 items-center justify-center">

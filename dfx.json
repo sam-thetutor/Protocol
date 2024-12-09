@@ -7,6 +7,10 @@
     "portal": {
       "main": "backend/dearnportal.mo",
       "type": "motoko"
+    },
+    "frontend": {
+      "source": ["build","src/assets"],
+      "type": "assets"
     }
   },
   "defaults": {

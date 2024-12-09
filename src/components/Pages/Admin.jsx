@@ -14,6 +14,7 @@ const Admin = () => {
   const [file, setWasmFile] = useState(null);
 
   const handleFileChange =(event) => {
+    console.log("event :",event)
     const selectedFile = event.target.files[0];
     console.log("uploaded wasm :",selectedFile)
     if (selectedFile) {
@@ -37,7 +38,9 @@ const Admin = () => {
   return (
     <>
      <h2>File Upload and Convert to Uint8Array</h2>
+
       <input type="file" onChange={handleFileChange} />
+      
       {file && <p>Selected File: {file.name}</p>}
     </>
 

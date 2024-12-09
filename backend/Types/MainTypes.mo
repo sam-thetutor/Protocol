@@ -40,4 +40,20 @@ module {
     amount : Nat64;
     recTime : Nat;
   };
+
+
+  //analytics
+
+  public type MinerAnalytics={
+    
+
+
+
+  };
+
+
+
+
+
+
 };

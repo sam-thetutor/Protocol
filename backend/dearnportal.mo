@@ -20,17 +20,15 @@ import Error "mo:base/Error";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Int "mo:base/Int";
+import HashMap "mo:base/HashMap";
 import BobTypes "Types/BOB/Bob.types";
 import MgtTypes "Types/ICP/mgt.types";
 import BoneTypes "Types/BONE/Bone.types";
+import DearnPortalTypes "Types/DearnPortal.types";
 
 actor class DEARNPORTAL() = this {
 
-
-    type RecurringWtrNeuronStake = MainTypes.RecurringWtrNeuronStake;
-
-
-    let PORTALFACTORY_CANISTER_ID :Text = "";
+    let PORTALFACTORY_CANISTER_ID : Text = "";
     let WATER_NEURON_CANISTER_ID : Text = "tsbvt-pyaaa-aaaar-qafva-cai";
     let WATER_NEURON_NICP_CANISTER_ID : Text = "buwm7-7yaaa-aaaar-qagva-cai";
     let ICP_CANISTER_ID : Text = "ryjl3-tyaaa-aaaaa-aaaba-cai";
@@ -38,26 +36,49 @@ actor class DEARNPORTAL() = this {
     let BONE_CANISTER_ID : Text = "r74ot-lyaaa-aaaai-aqaya-cai";
     let BONE_TOKEN_ID = "ry5ih-gaaaa-aaaai-aqayq-cai";
 
+    //bob analytics
+    var BobminersCreated : Nat = 0;
+    var BobminersUpgraded : Nat = 0;
+    var IcpSpentBob : Nat = 0;
+    var TotalHrsInBobPool : Nat = 0;
+
+    //bone analytics
+    var BoneminersCreated : Nat = 0;
+    var BoneminersUpgraded : Nat = 0;
+    var IcpSpentBone : Nat = 0;
+    var TotalPoolsJoined : Nat = 0;
+
+    let totalInvestments = HashMap.HashMap<Text, Nat>(0, Text.equal, Text.hash);
+
+    //add a new investment to the portal
+    func add_investment(platform : Text, amount : Nat) : () {
+
+        switch (totalInvestments.get(platform)) {
+            case (?_data) {
+                totalInvestments.put(platform, _data + amount);
+
+            };
+            case (null) {
+
+                totalInvestments.put(platform, amount);
+
+            };
+
+        };
+
+    };
+
+    //get the total investments in the portal
+    public query func get_all_portal_investments() : async [(Text, Nat)] {
+        return Iter.toArray<(Text, Nat)>(totalInvestments.entries());
+    };
+
     let ic = actor ("aaaaa-aa") : MgtTypes.IC;
     let bobActor = actor (BOB_CANISTER_ID) : BobTypes.Self;
     let boneActor = actor (BONE_CANISTER_ID) : BoneTypes.Self;
     let WaterNeuron = actor (WATER_NEURON_CANISTER_ID) : WaterneuronTypes.Self;
     let IcpActor = actor (ICP_CANISTER_ID) : IcpTypes.Self;
     let NicpActor = actor (WATER_NEURON_NICP_CANISTER_ID) : NicpTypes.Self;
-
-  
-  
-  
-  
-  
-  
-    private var recurringStaking = TrieMap.TrieMap<Text, MainTypes.RecurringWtrNeuronStake>(Text.equal, Text.hash);
-
-
-
-
-
-
 
     //create new Miner
     public func create_new_bob_miner() : async Text {
@@ -83,6 +104,9 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.spawn_miner(100000000);
                 switch (results) {
                     case (#Ok(prin)) {
+                        BobminersCreated += 1;
+                        IcpSpentBob += 100000000;
+                        add_investment("BOB", 100000000);
                         return "miner created successfully";
                     };
                     case (#Err(err)) {
@@ -96,19 +120,11 @@ actor class DEARNPORTAL() = this {
         };
     };
 
-
     //list the bob  miner for sale
 
     // public shared({caller}) func list_miner_for_sale():async Text{
     //     //call the backend to list the miner for sale
     // };
-
-
-
-
-
-
-
 
     //upgrade bob miner
     public func upgrade_bob_miner(_miner : Principal) : async Text {
@@ -134,6 +150,9 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.upgrade_miner(_miner);
                 switch (results) {
                     case (#Ok) {
+                        BobminersUpgraded += 1;
+                        IcpSpentBob += 100000000;
+                        add_investment("BOB", 100000000);
                         return "miner upgraded successfully";
                     };
                     case (#Err(err)) {
@@ -142,13 +161,15 @@ actor class DEARNPORTAL() = this {
                 };
             };
             case (#Err(err)) {
-                return "failed to approve the bob actor to spend the icp"
+                return "failed to approve the bob actor to spend the icp";
             };
         };
     };
 
     //join the miner pool
     public func join_bob_miner_pool(amount : Nat) : async Text {
+
+        if (amount < 100000000) { return "minimum is 1 ICP" };
 
         let approvalResults = await IcpActor.icrc2_approve({
             fee = null;
@@ -168,6 +189,9 @@ actor class DEARNPORTAL() = this {
                 let results = await bobActor.join_pool(Nat64.fromNat(amount));
                 switch (results) {
                     case (#Ok) {
+                        IcpSpentBob += amount;
+                        TotalHrsInBobPool += (amount / 100000000);
+                        add_investment("BOB", amount);
                         return "joined the miner pool";
                     };
                     case (#Err(err)) {
@@ -178,6 +202,17 @@ actor class DEARNPORTAL() = this {
             case (#Err(err)) {
                 return "failed to approve the bob actor to spend the icp";
             };
+        };
+
+    };
+
+    //get bob analytics
+    public func get_bob_analytics() : async DearnPortalTypes.BobAnalytics {
+        return {
+            minersCreated = BobminersCreated;
+            minersUpgrades = BobminersUpgraded;
+            icpSpent = IcpSpentBob;
+            totalHrsInPool = TotalHrsInBobPool;
         };
 
     };
@@ -208,6 +243,8 @@ actor class DEARNPORTAL() = this {
                 let results = await boneActor.create_dog(_name);
                 switch (results) {
                     case (#Ok(prin)) {
+                        BoneminersCreated += 1;
+                        add_investment("BONE", 100000000);
                         return "miner created successfully";
                     };
                     case (#Err(err)) {
@@ -223,7 +260,6 @@ actor class DEARNPORTAL() = this {
 
     //join a dog alliance group
     public func join_bone_alliance_group(alliance_id : Nat64) : async Text {
-
         let approvalResults = await IcpActor.icrc2_approve({
             fee = null;
             memo = null;
@@ -243,6 +279,9 @@ actor class DEARNPORTAL() = this {
                 let results = await boneActor.join_alliance(Principal.fromActor(this), alliance_id);
                 switch (results) {
                     case (#Ok) {
+                        TotalPoolsJoined += 1;
+                        IcpSpentBone += 100000000;
+                        add_investment("BONE", 100000000);
                         return "joined the alliance group";
                     };
                     case (#Err(err)) {
@@ -253,6 +292,17 @@ actor class DEARNPORTAL() = this {
             case (#Err(err)) {
                 return "failed to approve the bob actor to spend the icp";
             };
+        };
+
+    };
+
+    //get bob analytics
+    public func get_bone_analytics() : async DearnPortalTypes.BobAnalytics {
+        return {
+            minersCreated = BobminersCreated;
+            minersUpgrades = BobminersUpgraded;
+            icpSpent = IcpSpentBob;
+            totalHrsInPool = TotalHrsInBobPool;
         };
 
     };
@@ -292,7 +342,7 @@ actor class DEARNPORTAL() = this {
 
                 switch (stakeResults) {
                     case (#Ok(depSuccess)) {
-
+                        add_investment("WTN", formattedAmount);
                         return "staking success";
                     };
                     case (_) { return "staking failed" };
@@ -353,13 +403,9 @@ actor class DEARNPORTAL() = this {
             owner = Principal.fromActor(this);
             subaccount = null;
         });
-
         return {
             nicp = res;
         };
     };
-
-
-
 
 };

@@ -24,11 +24,27 @@ export interface CanisterInfo {
   'stakers_count' : bigint,
 }
 export interface DEARNPORTAL {
+  'create_new_bob_miner' : ActorMethod<[], string>,
+  'create_new_bone_miner' : ActorMethod<[string], string>,
+  'get_analytics' : ActorMethod<
+    [],
+    {
+      'minerUpgradeCount' : bigint,
+      'logData' : Array<LogData>,
+      'minerCreationCount' : bigint,
+      'totalStakedAmount' : bigint,
+    }
+  >,
+  'get_logs' : ActorMethod<[], Array<LogData>>,
   'get_my_water_neuron_stakes' : ActorMethod<[], { 'nicp' : bigint }>,
   'get_water_neuron_info' : ActorMethod<[], CanisterInfo>,
+  'join_bob_miner_pool' : ActorMethod<[bigint], string>,
+  'join_bone_alliance_group' : ActorMethod<[bigint], string>,
   'stake_in_water_neuron' : ActorMethod<[bigint], string>,
   'unstake_from_water_neuron' : ActorMethod<[bigint], string>,
+  'upgrade_bob_miner' : ActorMethod<[Principal], string>,
 }
+export interface LogData { 'action' : string, 'timestamp' : bigint }
 export interface NeuronId { 'id' : bigint }
 export interface _SERVICE extends DEARNPORTAL {}
 export declare const idlFactory: IDL.InterfaceFactory;

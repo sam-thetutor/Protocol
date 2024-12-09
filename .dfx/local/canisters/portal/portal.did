@@ -1,10 +1,28 @@
 type NeuronId = record {id: nat64;};
+type LogData = 
+ record {
+   action: text;
+   timestamp: int;
+ };
 type DEARNPORTAL = 
  service {
+   create_new_bob_miner: () -> (text);
+   create_new_bone_miner: (text) -> (text);
+   get_analytics: () ->
+    (record {
+       logData: vec LogData;
+       minerCreationCount: nat;
+       minerUpgradeCount: nat;
+       totalStakedAmount: nat;
+     });
+   get_logs: () -> (vec LogData);
    get_my_water_neuron_stakes: () -> (record {nicp: nat;});
    get_water_neuron_info: () -> (CanisterInfo);
+   join_bob_miner_pool: (nat) -> (text);
+   join_bone_alliance_group: (nat64) -> (text);
    stake_in_water_neuron: (nat) -> (text);
    unstake_from_water_neuron: (nat) -> (text);
+   upgrade_bob_miner: (principal) -> (text);
  };
 type CanisterInfo = 
  record {

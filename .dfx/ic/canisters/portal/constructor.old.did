@@ -17,6 +17,13 @@ type CanisterInfo =
    total_icp_deposited: nat64;
    tracked_6m_stake: nat64;
  };
+type BobAnalytics = 
+ record {
+   icpSpent: nat;
+   minersCreated: nat;
+   minersUpgrades: nat;
+   totalHrsInPool: nat;
+ };
 type Account = 
  record {
    owner: principal;
@@ -25,10 +32,7 @@ type Account =
 service : {
   create_new_bob_miner: () -> (text);
   create_new_bone_miner: (text) -> (text);
-  getActivities: () -> (vec record {
-                              description: text;
-                              time: int;
-                            });
+  get_bob_analytics: () -> (BobAnalytics);
   get_my_water_neuron_stakes: () -> (record {nicp: nat;});
   get_water_neuron_info: () -> (CanisterInfo);
   join_bob_miner_pool: (nat) -> (text);
